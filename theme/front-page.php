@@ -154,7 +154,7 @@ get_header();
                     </p>
                 </div>
 
-                <form @submit.prevent="handleLogin" class="space-y-5">
+                <form @submit.prevent="handleLogin" class="flex flex-col gap-5">
                     <!-- Username / Email -->
                     <div>
                         <label for="login-user"
@@ -294,7 +294,7 @@ get_header();
                     </p>
                 </div>
 
-                <form @submit.prevent="handleForgot" class="space-y-5">
+                <form @submit.prevent="handleForgot" class="flex flex-col gap-5">
                     <div>
                         <label for="forgot-email"
                             class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
@@ -362,7 +362,7 @@ get_header();
                     </p>
                 </div>
 
-                <form @submit.prevent="handleReset" class="space-y-5">
+                <form @submit.prevent="handleReset" class="flex flex-col gap-5">
                     <div>
                         <label for="reset-pass"
                             class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">

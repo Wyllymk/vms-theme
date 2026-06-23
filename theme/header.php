@@ -107,11 +107,13 @@ $role     = vms_current_role();
 						     Without a hard cap, a wide SVG logo will happily fill
 						     the whole flex row on mobile. -->
                     <img src="<?php echo esc_url( $branding['club_logo_url'] ); ?>"
-                        alt="<?php echo esc_attr( $branding['club_name'] ); ?>" class="object-contain w-auto transition-transform duration-300 shrink-0 ease-spring group-hover:scale-110"
+                        alt="<?php echo esc_attr( $branding['club_name'] ); ?>"
+                        class="object-contain w-auto transition-transform duration-300 shrink-0 ease-spring group-hover:scale-110"
                         style="max-width:160px;max-height:36px;height:36px;filter:drop-shadow(0 2px 8px rgba(var(--vms-primary-rgb),0.3));">
                     <?php else : ?>
                     <!-- Fallback brand mark — gradient orb with initial -->
-                    <div class="flex items-center justify-center text-lg font-bold text-white transition-all duration-300 h-9 w-9 shrink-0 rounded-xl bg-gradient-brand shadow-glow-sm ease-spring group-hover:scale-110 group-hover:shadow-glow-md">
+                    <div
+                        class="flex items-center justify-center text-lg font-bold text-white transition-all duration-300 h-9 w-9 shrink-0 rounded-xl bg-gradient-brand shadow-glow-sm ease-spring group-hover:scale-110 group-hover:shadow-glow-md">
                         <?php echo esc_html( mb_strtoupper( mb_substr( $branding['club_name'], 0, 1 ) ) ); ?>
                     </div>
                     <?php endif; ?>
@@ -185,7 +187,7 @@ $role     = vms_current_role();
                         <div class="relative w-8 h-8 rounded-xl
 						            bg-gradient-brand
 						            flex items-center justify-center
-						            text-slate-950 dark:text-white text-sm font-bold
+						            text-white text-sm font-bold
 						            shadow-[0_2px_8px_rgba(var(--vms-primary-rgb),0.4)]
 						            transition-transform duration-200 group-hover:scale-105">
                             <?php echo esc_html( mb_strtoupper( mb_substr( wp_get_current_user()->display_name, 0, 1 ) ) ); ?>
@@ -212,12 +214,14 @@ $role     = vms_current_role();
                         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                         x-transition:leave="transition ease-smooth duration-150"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90"
-                        class="absolute right-0 z-50 w-64 mt-3 overflow-hidden border bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl backdrop-saturate-150 rounded-2xl border-white/50 dark:border-slate-700/50 shadow-glass-hover" role="menu">
+                        class="absolute right-0 z-50 w-64 mt-3 overflow-hidden border bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl backdrop-saturate-150 rounded-2xl border-white/50 dark:border-slate-700/50 shadow-glass-hover"
+                        role="menu">
                         <!-- Top shine -->
                         <div class="absolute inset-x-0 top-0 h-px bg-gradient-shine" aria-hidden="true"></div>
 
                         <!-- User info header with gradient wash -->
-                        <div class="relative px-4 py-4 border-b border-slate-200/50 dark:border-slate-700/50 bg-gradient-brand-soft">
+                        <div
+                            class="relative px-4 py-4 border-b border-slate-200/50 dark:border-slate-700/50 bg-gradient-brand-soft">
                             <p class="text-sm font-bold text-slate-900 dark:text-white">
                                 <?php echo esc_html( wp_get_current_user()->display_name ); ?>
                             </p>
@@ -251,7 +255,7 @@ $role     = vms_current_role();
                             </a>
 
                             <?php if ( current_user_can( 'manage_options' ) ) : ?>
-                            <a href="<?php echo esc_url( vms_get_page_url( 'admin' ) ); ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium
+                            <a href="<?php echo esc_url( admin_url() ); ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium
 									       text-slate-700 dark:text-slate-300
 									       hover:bg-gradient-brand-soft hover:text-[var(--vms-primary)]
 									       transition-colors" role="menuitem">
@@ -261,20 +265,6 @@ $role     = vms_current_role();
                                         d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                                 <?php esc_html_e( 'Admin Panel', 'vms-theme' ); ?>
-                            </a>
-
-                            <a href="<?php echo esc_url( admin_url() ); ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium
-									       text-slate-700 dark:text-slate-300
-									       hover:bg-gradient-brand-soft hover:text-[var(--vms-primary)]
-									       transition-colors" role="menuitem">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <?php esc_html_e( 'WP Admin', 'vms-theme' ); ?>
                             </a>
                             <?php endif; ?>
                         </div>

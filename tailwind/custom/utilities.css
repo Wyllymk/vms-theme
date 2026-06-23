@@ -41,8 +41,10 @@
 
 	/* Glassmorphism core */
 	--vms-glass-bg: rgba(255, 255, 255, 0.45);
-	--vms-glass-bg-strong: rgba(255, 255, 255, 0.75);
-	--vms-glass-border: rgba(255, 255, 255, 0.6);
+	--vms-glass-bg-strong: rgba(255, 255, 255, 0.95);
+	--vms-glass-border: rgba(148, 163, 184, 0.4);
+	--vms-input-shadow:
+		0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 	--vms-glass-shine: rgba(255, 255, 255, 0.9);
 	--vms-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 	--vms-glass-shadow-hover: 0 12px 48px 0 rgba(31, 38, 135, 0.25);
@@ -81,6 +83,8 @@
 
 	--vms-glass-bg: rgba(30, 41, 59, 0.35);
 	--vms-glass-bg-strong: rgba(30, 41, 59, 0.7);
+	--vms-input-shadow:
+		0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 	--vms-glass-border: rgba(148, 163, 184, 0.15);
 	--vms-glass-shine: rgba(148, 163, 184, 0.1);
 	--vms-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
@@ -434,7 +438,7 @@ body::after {
 
 .vms-main {
 	flex: 1;
-	margin-left: 260px;
+	/* margin-left: 260px; */
 	padding: 1.5rem;
 	min-height: 100vh;
 	transition: margin-left 0.3s var(--vms-ease-smooth);
@@ -609,6 +613,7 @@ body::after {
 	font-size: 0.875rem;
 	font-family: inherit;
 	transition: all 0.25s var(--vms-ease-smooth);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
 	outline: none;
 }
 
@@ -1012,10 +1017,10 @@ body::after {
 .vms-modal {
 	position: relative;
 	background: var(--vms-glass-bg-strong);
-	backdrop-filter: blur(var(--vms-glass-blur-strong))
+	/* backdrop-filter: blur(var(--vms-glass-blur-strong))
 		saturate(var(--vms-glass-saturate));
 	-webkit-backdrop-filter: blur(var(--vms-glass-blur-strong))
-		saturate(var(--vms-glass-saturate));
+		saturate(var(--vms-glass-saturate)); */
 	border: 1px solid var(--vms-glass-border);
 	border-radius: 1.5rem;
 	box-shadow:
@@ -1041,6 +1046,10 @@ body::after {
 		var(--vms-glass-shine),
 		transparent
 	);
+}
+
+.vms-modal-md {
+	max-width: 40rem;
 }
 
 .vms-modal-lg {

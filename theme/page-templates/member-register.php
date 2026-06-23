@@ -96,7 +96,7 @@ get_header();
                         </p>
                     </div>
 
-                    <form @submit.prevent="submit" class="space-y-4">
+                    <form @submit.prevent="submit" class="flex flex-col gap-4">
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div>
                                 <label
@@ -186,8 +186,7 @@ get_header();
                         <?php esc_html_e( 'Application received', 'vms-theme' ); ?>
                     </h2>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-6" x-text="successMsg"></p>
-                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-brand text-white font-semibold rounded-2xl shadow-glow-sm hover:shadow-glow-md transition-all">
+                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="vms-btn vms-btn-primary">
                         <?php esc_html_e( 'Back to home', 'vms-theme' ); ?>
                     </a>
                 </div>

@@ -26,42 +26,44 @@ vms_require_capability( 'vms_manage_reciprocation' );
 get_header();
 ?>
 
-<div class="space-y-6" x-data="reciprocationPage()" x-init="init()">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                <?php esc_html_e( 'Reciprocation', 'vms-theme' ); ?>
-            </h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                <?php esc_html_e( 'Manage reciprocating clubs, their members, and visit records.', 'vms-theme' ); ?>
-            </p>
-        </div>
-        <div class="flex items-center gap-3">
-            <!-- Export Button -->
-            <button @click="handleExport()"
-                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <?php esc_html_e( 'Export PDF', 'vms-theme' ); ?>
-            </button>
-            <!-- Primary Action Button (context-sensitive) -->
-            <button @click="openAddModal()"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--vms-primary)] hover:bg-[var(--vms-primary)]/90 text-white font-medium rounded-xl shadow-lg shadow-[var(--vms-primary)]/25 transition-all duration-200">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                <span
-                    x-text="activeTab === 'clubs' ? '<?php echo esc_js( __( 'Add Club', 'vms-theme' ) ); ?>' : activeTab === 'members' ? '<?php echo esc_js( __( 'Register Member', 'vms-theme' ) ); ?>' : '<?php echo esc_js( __( 'Register Visit', 'vms-theme' ) ); ?>'"></span>
-            </button>
+<div class="flex flex-col gap-6" x-data="reciprocationPage()" x-init="init()">
+
+    <!-- ================================================================
+	     PAGE HEADER
+	     ================================================================ -->
+    <div class="vms-card" style="margin-bottom:1.5rem;">
+        <div class="vms-flex vms-items-center vms-justify-between" style="flex-wrap:wrap;gap:1rem;">
+            <div>
+                <h1 class="vms-text-xl vms-font-bold" style="margin:0;">
+                    <?php esc_html_e( 'Reciprocation', 'vms-theme' ); ?>
+                </h1>
+                <p class="vms-text-sm vms-text-muted" style="margin:0.25rem 0 0;">
+                    <?php esc_html_e( 'Manage reciprocation records, register new reciprocation, and view visit history.', 'vms-theme' ); ?>
+                </p>
+            </div>
+            <div class="vms-flex vms-gap-2" style="flex-wrap:wrap;">
+                <!-- Export Button -->
+                <button @click="handleExport()" class="vms-btn vms-btn-secondary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <?php esc_html_e( 'Export PDF', 'vms-theme' ); ?>
+                </button>
+                <!-- Primary Action Button (context-sensitive) -->
+                <button @click="openAddModal()" class="vms-btn vms-btn-primary">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span
+                        x-text="activeTab === 'clubs' ? '<?php echo esc_js( __( 'Add Club', 'vms-theme' ) ); ?>' : activeTab === 'members' ? '<?php echo esc_js( __( 'Register Member', 'vms-theme' ) ); ?>' : '<?php echo esc_js( __( 'Register Visit', 'vms-theme' ) ); ?>'"></span>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Tab Navigation -->
-    <div
-        class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-1.5">
+    <div class="vms-card">
         <div class="flex gap-1">
             <template x-for="tab in tabs" :key="tab.key">
                 <button @click="switchTab(tab.key)"
@@ -73,8 +75,7 @@ get_header();
     </div>
 
     <!-- Search & Filters -->
-    <div
-        class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-4">
+    <div class="vms-card">
         <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
@@ -112,8 +113,7 @@ get_header();
     </div>
 
     <!-- Loading State -->
-    <div x-show="loading"
-        class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 text-center">
+    <div x-show="loading" class="vms-card text-center">
         <svg class="animate-spin h-8 w-8 mx-auto text-[var(--vms-primary)]" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
@@ -124,8 +124,7 @@ get_header();
     <!-- ==================== CLUBS TAB ==================== -->
     <div x-show="!loading && activeTab === 'clubs'" x-cloak>
         <!-- Clubs Table -->
-        <div x-show="paginatedClubs.length > 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+        <div x-show="paginatedClubs.length > 0" class="vms-card">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -226,8 +225,7 @@ get_header();
         </div>
 
         <!-- Clubs Empty State -->
-        <div x-show="filteredClubs.length === 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-12 text-center">
+        <div x-show="filteredClubs.length === 0" class="vms-card text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -245,8 +243,7 @@ get_header();
     <!-- ==================== MEMBERS TAB ==================== -->
     <div x-show="!loading && activeTab === 'members'" x-cloak>
         <!-- Members Table -->
-        <div x-show="paginatedMembers.length > 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+        <div x-show="paginatedMembers.length > 0" class="vms-card">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -342,8 +339,7 @@ get_header();
         </div>
 
         <!-- Members Empty State -->
-        <div x-show="filteredMembers.length === 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-12 text-center">
+        <div x-show="filteredMembers.length === 0" class="vms-card text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -361,8 +357,7 @@ get_header();
     <!-- ==================== VISITS TAB ==================== -->
     <div x-show="!loading && activeTab === 'visits'" x-cloak>
         <!-- Visits Table -->
-        <div x-show="paginatedVisits.length > 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+        <div x-show="paginatedVisits.length > 0" class="vms-card">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -490,8 +485,7 @@ get_header();
         </div>
 
         <!-- Visits Empty State -->
-        <div x-show="filteredVisits.length === 0"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-12 text-center">
+        <div x-show="filteredVisits.length === 0" class="vms-card text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -566,7 +560,7 @@ get_header();
                     </svg>
                 </button>
             </div>
-            <form @submit.prevent="saveClub" class="p-6 space-y-4">
+            <form @submit.prevent="saveClub" class="p-6 flex flex-col gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         <?php esc_html_e( 'Club Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
@@ -667,7 +661,7 @@ get_header();
                     </svg>
                 </button>
             </div>
-            <form @submit.prevent="saveMember" class="p-6 space-y-4">
+            <form @submit.prevent="saveMember" class="p-6 flex flex-col gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         <?php esc_html_e( 'Affiliated Club', 'vms-theme' ); ?> <span class="text-red-500">*</span>
@@ -785,7 +779,7 @@ get_header();
                     </svg>
                 </button>
             </div>
-            <form @submit.prevent="saveVisit" class="p-6 space-y-4">
+            <form @submit.prevent="saveVisit" class="p-6 flex flex-col gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         <?php esc_html_e( 'Member', 'vms-theme' ); ?> <span class="text-red-500">*</span>
@@ -1273,7 +1267,7 @@ function reciprocationPage() {
 
             if (!this.memberForm.club_id) {
                 this.memberError =
-                '<?php echo esc_js( __( 'Please select an affiliated club.', 'vms-theme' ) ); ?>';
+                    '<?php echo esc_js( __( 'Please select an affiliated club.', 'vms-theme' ) ); ?>';
                 return;
             }
 
