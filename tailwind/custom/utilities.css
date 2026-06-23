@@ -1,0 +1,2111 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   VMS Theme — Glassmorphism Design System
+   ═══════════════════════════════════════════════════════════════════════════
+   Modern frosted-glass UI with animated aurora backgrounds, gradient borders,
+   neon-glow accents, and micro-interactions. Sits on top of Tailwind utilities.
+
+   Design tokens are exposed as CSS custom properties so per-club branding
+   (injected server-side by vms_theme_inline_branding_vars()) automatically
+   flows through every component.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+	/* Brand palette — overridable per-club via inline <style> */
+	--vms-primary: #0ea5e9;
+	--vms-primary-hover: #0284c7;
+	--vms-primary-light: #e0f2fe;
+	--vms-primary-rgb: 14, 165, 233;
+	--vms-secondary: #8b5cf6;
+	--vms-secondary-hover: #7c3aed;
+	--vms-secondary-rgb: 139, 92, 246;
+	--vms-accent: #ec4899;
+	--vms-accent-rgb: 236, 72, 153;
+	--vms-success: #10b981;
+	--vms-warning: #f59e0b;
+	--vms-danger: #ef4444;
+	--vms-info: #3b82f6;
+
+	/* Surface colours — light mode */
+	--vms-bg: #f1f5f9;
+	--vms-bg-card: rgba(255, 255, 255, 0.55);
+	--vms-bg-sidebar: rgba(255, 255, 255, 0.65);
+	--vms-bg-input: rgba(255, 255, 255, 0.8);
+	--vms-text: #0f172a;
+	--vms-text-muted: #64748b;
+	--vms-text-light: #94a3b8;
+	--vms-border: rgba(226, 232, 240, 0.8);
+	--vms-border-hover: #cbd5e1;
+
+	/* Glassmorphism core */
+	--vms-glass-bg: rgba(255, 255, 255, 0.45);
+	--vms-glass-bg-strong: rgba(255, 255, 255, 0.75);
+	--vms-glass-border: rgba(255, 255, 255, 0.6);
+	--vms-glass-shine: rgba(255, 255, 255, 0.9);
+	--vms-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+	--vms-glass-shadow-hover: 0 12px 48px 0 rgba(31, 38, 135, 0.25);
+	--vms-glass-blur: 16px;
+	--vms-glass-blur-strong: 24px;
+	--vms-glass-saturate: 180%;
+
+	/* Neon glow intensities */
+	--vms-glow-sm: 0 0 12px rgba(var(--vms-primary-rgb), 0.35);
+	--vms-glow-md: 0 0 24px rgba(var(--vms-primary-rgb), 0.45);
+	--vms-glow-lg: 0 0 40px rgba(var(--vms-primary-rgb), 0.55);
+
+	/* Legacy shadow tokens (kept for existing templates) */
+	--vms-shadow: var(--vms-glass-shadow);
+	--vms-shadow-lg: var(--vms-glass-shadow-hover);
+
+	/* Motion curves */
+	--vms-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--vms-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Chart.js palette bridge */
+	--vms-chart-grid: rgba(148, 163, 184, 0.15);
+	--vms-chart-text: #64748b;
+}
+
+.dark {
+	--vms-bg: #020617;
+	--vms-bg-card: rgba(30, 41, 59, 0.45);
+	--vms-bg-sidebar: rgba(15, 23, 42, 0.65);
+	--vms-bg-input: rgba(30, 41, 59, 0.6);
+	--vms-text: #f1f5f9;
+	--vms-text-muted: #94a3b8;
+	--vms-text-light: #64748b;
+	--vms-border: rgba(51, 65, 85, 0.5);
+	--vms-border-hover: #475569;
+
+	--vms-glass-bg: rgba(30, 41, 59, 0.35);
+	--vms-glass-bg-strong: rgba(30, 41, 59, 0.7);
+	--vms-glass-border: rgba(148, 163, 184, 0.15);
+	--vms-glass-shine: rgba(148, 163, 184, 0.1);
+	--vms-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+	--vms-glass-shadow-hover: 0 12px 48px 0 rgba(0, 0, 0, 0.7);
+
+	--vms-glow-sm: 0 0 16px rgba(var(--vms-primary-rgb), 0.5);
+	--vms-glow-md: 0 0 32px rgba(var(--vms-primary-rgb), 0.6);
+	--vms-glow-lg: 0 0 56px rgba(var(--vms-primary-rgb), 0.7);
+
+	--vms-primary-light: rgba(var(--vms-primary-rgb), 0.15);
+
+	--vms-chart-grid: rgba(148, 163, 184, 0.1);
+	--vms-chart-text: #94a3b8;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   2. BASE RESET & GLOBAL TYPOGRAPHY
+   ─────────────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-family:
+		"Inter",
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		"Helvetica Neue",
+		Arial,
+		sans-serif;
+	line-height: 1.6;
+	-webkit-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--vms-bg);
+	color: var(--vms-text);
+	min-height: 100vh;
+	overflow-x: hidden;
+	transition:
+		background-color 0.4s var(--vms-ease-smooth),
+		color 0.4s var(--vms-ease-smooth);
+}
+
+a {
+	color: var(--vms-primary);
+	text-decoration: none;
+	transition: color 0.2s var(--vms-ease-smooth);
+}
+
+a:hover {
+	color: var(--vms-primary-hover);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--vms-text);
+	letter-spacing: -0.02em;
+}
+
+::selection {
+	background: rgba(var(--vms-primary-rgb), 0.3);
+	color: var(--vms-text);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   3. ANIMATED AURORA BACKGROUND
+   The body gets two blurred, slowly-drifting gradient blobs behind everything.
+   They create the depth that makes the frosted glass actually visible.
+   ─────────────────────────────────────────────────────────────────────────── */
+body::before,
+body::after {
+	content: "";
+	position: fixed;
+	border-radius: 50%;
+	filter: blur(120px);
+	opacity: 0.5;
+	z-index: -1;
+	pointer-events: none;
+	will-change: transform;
+}
+
+body::before {
+	width: 45vw;
+	height: 45vw;
+	min-width: 400px;
+	min-height: 400px;
+	top: -10%;
+	left: -10%;
+	background: radial-gradient(
+		circle,
+		rgba(var(--vms-primary-rgb), 0.6) 0%,
+		transparent 70%
+	);
+	animation: vms-aurora-1 25s ease-in-out infinite alternate;
+}
+
+body::after {
+	width: 40vw;
+	height: 40vw;
+	min-width: 350px;
+	min-height: 350px;
+	bottom: -10%;
+	right: -10%;
+	background: radial-gradient(
+		circle,
+		rgba(var(--vms-secondary-rgb), 0.5) 0%,
+		transparent 70%
+	);
+	animation: vms-aurora-2 30s ease-in-out infinite alternate;
+}
+
+.dark body::before {
+	opacity: 0.35;
+	background: radial-gradient(
+		circle,
+		rgba(var(--vms-primary-rgb), 0.5) 0%,
+		transparent 65%
+	);
+}
+
+.dark body::after {
+	opacity: 0.3;
+	background: radial-gradient(
+		circle,
+		rgba(var(--vms-secondary-rgb), 0.45) 0%,
+		transparent 65%
+	);
+}
+
+@keyframes vms-aurora-1 {
+	0% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(8vw, 5vh) scale(1.15);
+	}
+	100% {
+		transform: translate(-4vw, 8vh) scale(0.95);
+	}
+}
+
+@keyframes vms-aurora-2 {
+	0% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(-6vw, -4vh) scale(1.1);
+	}
+	100% {
+		transform: translate(5vw, -7vh) scale(0.9);
+	}
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	body::before,
+	body::after {
+		animation: none;
+	}
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* Subtle noise texture overlay — adds a premium grain to the glass */
+.vms-noise::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	opacity: 0.03;
+	pointer-events: none;
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   4. GLASS PRIMITIVES
+   Reusable building blocks — apply to any element for instant glassmorphism.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Standard frosted panel */
+.vms-glass {
+	position: relative;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 1.25rem;
+	box-shadow: var(--vms-glass-shadow);
+	transition:
+		transform 0.3s var(--vms-ease-spring),
+		box-shadow 0.3s var(--vms-ease-smooth),
+		border-color 0.3s var(--vms-ease-smooth);
+}
+
+/* Heavier blur for modals & floating panels */
+.vms-glass-strong {
+	background: var(--vms-glass-bg-strong);
+	backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+}
+
+/* Interactive — lifts & glows on hover */
+.vms-glass-interactive {
+	cursor: pointer;
+}
+.vms-glass-interactive:hover {
+	transform: translateY(-4px) scale(1.01);
+	box-shadow: var(--vms-glass-shadow-hover), var(--vms-glow-sm);
+	border-color: rgba(var(--vms-primary-rgb), 0.4);
+}
+.vms-glass-interactive:active {
+	transform: translateY(-1px) scale(0.99);
+}
+
+/* Top-edge highlight — the signature glass "shine" line */
+.vms-glass-shine::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	border-radius: inherit;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--vms-glass-shine),
+		transparent
+	);
+	opacity: 0.8;
+	pointer-events: none;
+}
+
+/* Animated gradient border — padding box + mask technique */
+.vms-gradient-border {
+	position: relative;
+	border: none;
+	background:
+		linear-gradient(var(--vms-glass-bg), var(--vms-glass-bg)) padding-box,
+		linear-gradient(
+				135deg,
+				rgba(var(--vms-primary-rgb), 0.7),
+				rgba(var(--vms-secondary-rgb), 0.7),
+				rgba(var(--vms-accent-rgb), 0.7)
+			)
+			border-box;
+	border: 1.5px solid transparent;
+}
+.vms-gradient-border-animated {
+	background:
+		linear-gradient(var(--vms-glass-bg), var(--vms-glass-bg)) padding-box,
+		linear-gradient(
+				var(--vms-gradient-angle, 135deg),
+				rgba(var(--vms-primary-rgb), 0.7),
+				rgba(var(--vms-secondary-rgb), 0.7),
+				rgba(var(--vms-accent-rgb), 0.7),
+				rgba(var(--vms-primary-rgb), 0.7)
+			)
+			border-box;
+	animation: vms-border-spin 6s linear infinite;
+}
+
+@property --vms-gradient-angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
+}
+
+@keyframes vms-border-spin {
+	to {
+		--vms-gradient-angle: 360deg;
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   5. LAYOUT SHELL — navbar, sidebar, main
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-layout {
+	display: flex;
+	min-height: 100vh;
+}
+
+.vms-navbar {
+	background: var(--vms-glass-bg-strong);
+	backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	border-bottom: 1px solid var(--vms-glass-border);
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+	padding: 0.75rem 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: sticky;
+	top: 0;
+	z-index: 30;
+	transition: all 0.3s var(--vms-ease-smooth);
+}
+
+.dark .vms-navbar {
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.vms-sidebar {
+	width: 260px;
+	background: var(--vms-bg-sidebar);
+	backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	border-right: 1px solid var(--vms-glass-border);
+	padding: 1.5rem 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 40;
+	overflow-y: auto;
+	transition:
+		transform 0.3s var(--vms-ease-spring),
+		background-color 0.3s var(--vms-ease-smooth);
+}
+
+.vms-sidebar.hidden-mobile {
+	transform: translateX(-100%);
+}
+
+.vms-main {
+	flex: 1;
+	margin-left: 260px;
+	padding: 1.5rem;
+	min-height: 100vh;
+	transition: margin-left 0.3s var(--vms-ease-smooth);
+}
+
+/* Nav items — pill-shaped, glowing when active */
+.vms-nav-item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	margin: 0.25rem 0.75rem;
+	color: var(--vms-text-muted);
+	font-size: 0.875rem;
+	font-weight: 500;
+	border-radius: 0.875rem;
+	transition: all 0.25s var(--vms-ease-spring);
+	overflow: hidden;
+}
+
+.vms-nav-item::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: linear-gradient(
+		135deg,
+		rgba(var(--vms-primary-rgb), 0.15),
+		rgba(var(--vms-secondary-rgb), 0.1)
+	);
+	opacity: 0;
+	transition: opacity 0.25s var(--vms-ease-smooth);
+}
+
+.vms-nav-item:hover {
+	color: var(--vms-text);
+	transform: translateX(4px);
+}
+
+.vms-nav-item:hover::before {
+	opacity: 1;
+}
+
+.vms-nav-item.active {
+	color: var(--vms-primary);
+	font-weight: 600;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	border: 1px solid rgba(var(--vms-primary-rgb), 0.3);
+	box-shadow:
+		var(--vms-glow-sm),
+		inset 0 1px 0 var(--vms-glass-shine);
+}
+
+.vms-nav-item.active::before {
+	opacity: 1;
+}
+
+.vms-nav-item > * {
+	position: relative;
+	z-index: 1;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   6. CARDS
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-card {
+	position: relative;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur))
+		saturate(var(--vms-glass-saturate));
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 1.25rem;
+	padding: 1.5rem;
+	box-shadow: var(--vms-glass-shadow);
+	transition: all 0.3s var(--vms-ease-spring);
+	overflow: hidden;
+}
+
+/* Top shine */
+.vms-card::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--vms-glass-shine),
+		transparent
+	);
+	opacity: 0.6;
+}
+
+.vms-card:hover {
+	box-shadow: var(--vms-glass-shadow-hover);
+	border-color: rgba(var(--vms-primary-rgb), 0.3);
+}
+
+.vms-card-header {
+	padding-bottom: 1rem;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid var(--vms-border);
+}
+
+/* Stat card — big number + label with gradient text */
+.vms-stat-card {
+	text-align: left;
+	padding: 1.5rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.vms-stat-card .stat-value {
+	font-size: 2.25rem;
+	font-weight: 800;
+	line-height: 1.1;
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	letter-spacing: -0.03em;
+}
+
+.vms-stat-card .stat-label {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--vms-text-muted);
+	font-weight: 600;
+	margin-top: 0.5rem;
+}
+
+/* Decorative corner orb */
+.vms-stat-card::after {
+	content: "";
+	position: absolute;
+	top: -30%;
+	right: -20%;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	background: radial-gradient(
+		circle,
+		rgba(var(--vms-primary-rgb), 0.2),
+		transparent 70%
+	);
+	pointer-events: none;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   7. FORM CONTROLS — glass inputs
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-input,
+.vms-select,
+.vms-textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 0.875rem;
+	color: var(--vms-text);
+	font-size: 0.875rem;
+	font-family: inherit;
+	transition: all 0.25s var(--vms-ease-smooth);
+	outline: none;
+}
+
+.vms-input:hover,
+.vms-select:hover,
+.vms-textarea:hover {
+	border-color: var(--vms-border-hover);
+}
+
+.vms-input:focus,
+.vms-select:focus,
+.vms-textarea:focus {
+	border-color: rgba(var(--vms-primary-rgb), 0.6);
+	box-shadow:
+		0 0 0 4px rgba(var(--vms-primary-rgb), 0.15),
+		var(--vms-glow-sm);
+	background: var(--vms-glass-bg-strong);
+}
+
+.vms-input::placeholder,
+.vms-textarea::placeholder {
+	color: var(--vms-text-light);
+}
+
+.vms-label {
+	display: block;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--vms-text);
+	margin-bottom: 0.5rem;
+	letter-spacing: -0.01em;
+}
+
+.vms-form-group {
+	margin-bottom: 1.25rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   8. BUTTONS — gradient + glow
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.625rem 1.25rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	font-family: inherit;
+	border-radius: 0.875rem;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: all 0.25s var(--vms-ease-spring);
+	text-decoration: none;
+	line-height: 1.5;
+	letter-spacing: -0.01em;
+	overflow: hidden;
+	isolation: isolate;
+}
+
+.vms-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	transform: none !important;
+}
+
+.vms-btn:active:not(:disabled) {
+	transform: scale(0.97);
+}
+
+/* Primary — gradient + glow */
+.vms-btn-primary {
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	color: #ffffff;
+	box-shadow: 0 4px 16px rgba(var(--vms-primary-rgb), 0.35);
+}
+
+.vms-btn-primary::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+.vms-btn-primary:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow:
+		0 8px 24px rgba(var(--vms-primary-rgb), 0.5),
+		var(--vms-glow-md);
+}
+
+.vms-btn-primary:hover:not(:disabled)::before {
+	opacity: 1;
+}
+
+/* Secondary — glass outline */
+.vms-btn-secondary {
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	color: var(--vms-text);
+	border-color: var(--vms-glass-border);
+}
+
+.vms-btn-secondary:hover:not(:disabled) {
+	background: var(--vms-glass-bg-strong);
+	border-color: rgba(var(--vms-primary-rgb), 0.4);
+	color: var(--vms-primary);
+	transform: translateY(-2px);
+	box-shadow: var(--vms-glass-shadow);
+}
+
+.vms-btn-danger {
+	background: linear-gradient(135deg, #ef4444, #dc2626);
+	color: #ffffff;
+	box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+.vms-btn-danger:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5);
+}
+
+.vms-btn-warning {
+	background: linear-gradient(135deg, #f59e0b, #d97706);
+	color: #ffffff;
+	box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+}
+
+.vms-btn-warning:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+}
+
+.vms-btn-success {
+	background: linear-gradient(135deg, #10b981, #059669);
+	color: #ffffff;
+	box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+}
+
+.vms-btn-success:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+.vms-btn-sm {
+	padding: 0.375rem 0.875rem;
+	font-size: 0.75rem;
+	border-radius: 0.625rem;
+}
+.vms-btn-lg {
+	padding: 0.875rem 1.75rem;
+	font-size: 1rem;
+	border-radius: 1rem;
+}
+.vms-btn-block {
+	width: 100%;
+}
+
+/* Icon-only button */
+.vms-btn-icon {
+	padding: 0.625rem;
+	border-radius: 0.75rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   9. THEME TOGGLE — segmented control
+   Pill-shaped 3-way switch with a sliding indicator. Used in the top bar.
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-theme-toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0;
+	padding: 0.25rem;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(12px) saturate(180%);
+	-webkit-backdrop-filter: blur(12px) saturate(180%);
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 9999px;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.dark .vms-theme-toggle {
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.vms-theme-toggle button {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	border: none;
+	background: transparent;
+	color: var(--vms-text-muted);
+	cursor: pointer;
+	transition: color 0.3s var(--vms-ease-smooth);
+}
+
+.vms-theme-toggle button:hover {
+	color: var(--vms-text);
+}
+
+.vms-theme-toggle button.active {
+	color: #ffffff;
+}
+
+.dark .vms-theme-toggle button.active {
+	color: #ffffff;
+}
+
+/* The sliding pill indicator */
+.vms-theme-toggle-indicator {
+	position: absolute;
+	top: 0.25rem;
+	left: 0.25rem;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	box-shadow:
+		0 2px 8px rgba(var(--vms-primary-rgb), 0.5),
+		var(--vms-glow-sm);
+	transition: transform 0.35s var(--vms-ease-spring);
+	z-index: 1;
+}
+
+.vms-theme-toggle[data-mode="light"] .vms-theme-toggle-indicator {
+	transform: translateX(0);
+}
+.vms-theme-toggle[data-mode="dark"] .vms-theme-toggle-indicator {
+	transform: translateX(2.25rem);
+}
+.vms-theme-toggle[data-mode="system"] .vms-theme-toggle-indicator {
+	transform: translateX(4.5rem);
+}
+
+/* Compact variant for mobile */
+.vms-theme-toggle-compact button {
+	width: 2rem;
+	height: 2rem;
+}
+.vms-theme-toggle-compact .vms-theme-toggle-indicator {
+	width: 2rem;
+	height: 2rem;
+}
+.vms-theme-toggle-compact[data-mode="dark"] .vms-theme-toggle-indicator {
+	transform: translateX(2rem);
+}
+.vms-theme-toggle-compact[data-mode="system"] .vms-theme-toggle-indicator {
+	transform: translateX(4rem);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   10. TABLE — frosted rows
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: 0.875rem;
+}
+
+.vms-table thead th {
+	text-align: left;
+	padding: 0.875rem 1rem;
+	font-weight: 700;
+	color: var(--vms-text-muted);
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	border-bottom: 1px solid var(--vms-border);
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	position: sticky;
+	top: 0;
+}
+
+.vms-table thead th:first-child {
+	border-top-left-radius: 0.75rem;
+}
+.vms-table thead th:last-child {
+	border-top-right-radius: 0.75rem;
+}
+
+.vms-table td {
+	padding: 1rem;
+	border-bottom: 1px solid var(--vms-border);
+	color: var(--vms-text);
+	transition: background-color 0.2s;
+}
+
+.vms-table tbody tr {
+	transition: all 0.2s var(--vms-ease-smooth);
+}
+
+.vms-table tbody tr:hover {
+	background: rgba(var(--vms-primary-rgb), 0.05);
+}
+
+.vms-table tbody tr:hover td {
+	color: var(--vms-text);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   11. BADGES — glass pills
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.75rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+	border-radius: 9999px;
+	line-height: 1.4;
+	letter-spacing: 0.02em;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid;
+}
+
+.vms-badge-success {
+	background: rgba(16, 185, 129, 0.15);
+	color: #059669;
+	border-color: rgba(16, 185, 129, 0.3);
+}
+.dark .vms-badge-success {
+	background: rgba(16, 185, 129, 0.2);
+	color: #34d399;
+}
+
+.vms-badge-warning {
+	background: rgba(245, 158, 11, 0.15);
+	color: #d97706;
+	border-color: rgba(245, 158, 11, 0.3);
+}
+.dark .vms-badge-warning {
+	background: rgba(245, 158, 11, 0.2);
+	color: #fbbf24;
+}
+
+.vms-badge-danger {
+	background: rgba(239, 68, 68, 0.15);
+	color: #dc2626;
+	border-color: rgba(239, 68, 68, 0.3);
+}
+.dark .vms-badge-danger {
+	background: rgba(239, 68, 68, 0.2);
+	color: #f87171;
+}
+
+.vms-badge-info {
+	background: rgba(59, 130, 246, 0.15);
+	color: #2563eb;
+	border-color: rgba(59, 130, 246, 0.3);
+}
+.dark .vms-badge-info {
+	background: rgba(59, 130, 246, 0.2);
+	color: #60a5fa;
+}
+
+.vms-badge-neutral {
+	background: var(--vms-glass-bg);
+	color: var(--vms-text-muted);
+	border-color: var(--vms-glass-border);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   12. MODAL — deep glass
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(2, 6, 23, 0.5);
+	backdrop-filter: blur(8px) saturate(120%);
+	-webkit-backdrop-filter: blur(8px) saturate(120%);
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	animation: vms-fade-in 0.25s var(--vms-ease-smooth);
+}
+
+.vms-modal {
+	position: relative;
+	background: var(--vms-glass-bg-strong);
+	backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 1.5rem;
+	box-shadow:
+		var(--vms-glass-shadow-hover),
+		0 0 80px rgba(var(--vms-primary-rgb), 0.15);
+	width: 100%;
+	max-width: 32rem;
+	max-height: 90vh;
+	overflow-y: auto;
+	padding: 1.75rem;
+	animation: vms-modal-pop 0.35s var(--vms-ease-spring);
+}
+
+.vms-modal::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	border-radius: 1.5rem 1.5rem 0 0;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--vms-glass-shine),
+		transparent
+	);
+}
+
+.vms-modal-lg {
+	max-width: 48rem;
+}
+.vms-modal-xl {
+	max-width: 64rem;
+}
+
+@keyframes vms-modal-pop {
+	0% {
+		opacity: 0;
+		transform: scale(0.9) translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   13. TOAST NOTIFICATIONS — floating glass
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-toast-container {
+	position: fixed;
+	top: 5rem;
+	right: 1rem;
+	z-index: 60;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	max-width: 24rem;
+	width: calc(100% - 2rem);
+}
+
+.vms-toast {
+	position: relative;
+	padding: 1rem 1.25rem;
+	border-radius: 1rem;
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	box-shadow: var(--vms-glass-shadow-hover);
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	animation: vms-toast-in 0.4s var(--vms-ease-spring);
+	font-size: 0.875rem;
+	border: 1px solid;
+	overflow: hidden;
+}
+
+.vms-toast::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+}
+
+.vms-toast-success {
+	background: rgba(220, 252, 231, 0.85);
+	color: #166534;
+	border-color: rgba(16, 185, 129, 0.3);
+}
+.vms-toast-success::before {
+	background: var(--vms-success);
+}
+.dark .vms-toast-success {
+	background: rgba(20, 83, 45, 0.85);
+	color: #86efac;
+}
+
+.vms-toast-error {
+	background: rgba(254, 226, 226, 0.85);
+	color: #991b1b;
+	border-color: rgba(239, 68, 68, 0.3);
+}
+.vms-toast-error::before {
+	background: var(--vms-danger);
+}
+.dark .vms-toast-error {
+	background: rgba(127, 29, 29, 0.85);
+	color: #fca5a5;
+}
+
+.vms-toast-warning {
+	background: rgba(254, 243, 199, 0.85);
+	color: #92400e;
+	border-color: rgba(245, 158, 11, 0.3);
+}
+.vms-toast-warning::before {
+	background: var(--vms-warning);
+}
+.dark .vms-toast-warning {
+	background: rgba(120, 53, 15, 0.85);
+	color: #fde68a;
+}
+
+.vms-toast-info {
+	background: rgba(219, 234, 254, 0.85);
+	color: #1e40af;
+	border-color: rgba(59, 130, 246, 0.3);
+}
+.vms-toast-info::before {
+	background: var(--vms-info);
+}
+.dark .vms-toast-info {
+	background: rgba(30, 58, 95, 0.85);
+	color: #93c5fd;
+}
+
+@keyframes vms-toast-in {
+	0% {
+		transform: translateX(120%) scale(0.9);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0) scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes vms-slide-in {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   14. LOADING STATES
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-spinner {
+	display: inline-block;
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 2px solid var(--vms-glass-border);
+	border-top-color: var(--vms-primary);
+	border-right-color: var(--vms-secondary);
+	border-radius: 50%;
+	animation: vms-spin 0.7s linear infinite;
+}
+
+.vms-spinner-lg {
+	width: 2.75rem;
+	height: 2.75rem;
+	border-width: 3px;
+}
+
+@keyframes vms-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.vms-loading-overlay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem;
+	color: var(--vms-text-muted);
+	gap: 0.75rem;
+}
+
+/* Skeleton shimmer */
+.vms-skeleton {
+	position: relative;
+	overflow: hidden;
+	background: var(--vms-glass-bg);
+	border-radius: 0.5rem;
+}
+
+.vms-skeleton::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(var(--vms-primary-rgb), 0.15),
+		transparent
+	);
+	animation: vms-shimmer 1.6s infinite;
+}
+
+@keyframes vms-shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   15. LOGIN PAGE — hero glass card
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-login-page {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	position: relative;
+}
+
+.vms-login-card {
+	position: relative;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--vms-glass-blur-strong))
+		saturate(var(--vms-glass-saturate));
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 1.75rem;
+	padding: 2.5rem;
+	width: 100%;
+	max-width: 26rem;
+	box-shadow:
+		var(--vms-glass-shadow-hover),
+		0 0 100px rgba(var(--vms-primary-rgb), 0.2);
+	animation: vms-modal-pop 0.5s var(--vms-ease-spring);
+}
+
+.vms-login-card::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	border-radius: 1.75rem 1.75rem 0 0;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--vms-glass-shine),
+		transparent
+	);
+}
+
+.vms-login-logo {
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.vms-login-logo img {
+	max-height: 64px;
+	margin: 0 auto;
+	filter: drop-shadow(0 4px 12px rgba(var(--vms-primary-rgb), 0.3));
+}
+
+.vms-login-logo h1 {
+	font-size: 1.625rem;
+	font-weight: 800;
+	margin-top: 1rem;
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary),
+		var(--vms-accent)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	letter-spacing: -0.03em;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   16. PAGINATION
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.375rem;
+	margin-top: 1.5rem;
+	flex-wrap: wrap;
+}
+
+.vms-pagination button {
+	min-width: 2.25rem;
+	height: 2.25rem;
+	padding: 0 0.75rem;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid var(--vms-glass-border);
+	color: var(--vms-text);
+	border-radius: 0.625rem;
+	cursor: pointer;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	transition: all 0.2s var(--vms-ease-spring);
+}
+
+.vms-pagination button:hover:not(:disabled) {
+	border-color: rgba(var(--vms-primary-rgb), 0.4);
+	color: var(--vms-primary);
+	transform: translateY(-2px);
+}
+
+.vms-pagination button.active {
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	color: #ffffff;
+	border-color: transparent;
+	box-shadow: var(--vms-glow-sm);
+}
+
+.vms-pagination button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   17. SCROLLBAR — branded, thin
+   ─────────────────────────────────────────────────────────────────────────── */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(var(--vms-primary-rgb), 0.4) transparent;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: linear-gradient(var(--vms-primary), var(--vms-secondary));
+	border-radius: 999px;
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: linear-gradient(
+		var(--vms-primary-hover),
+		var(--vms-secondary-hover)
+	);
+	background-clip: padding-box;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   18. UTILITY CLASSES
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-grid {
+	display: grid;
+	gap: 1rem;
+}
+.vms-grid-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+.vms-grid-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+.vms-grid-4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.vms-flex {
+	display: flex;
+}
+.vms-flex-wrap {
+	flex-wrap: wrap;
+}
+.vms-items-center {
+	align-items: center;
+}
+.vms-justify-between {
+	justify-content: space-between;
+}
+.vms-gap-2 {
+	gap: 0.5rem;
+}
+.vms-gap-4 {
+	gap: 1rem;
+}
+
+.vms-text-center {
+	text-align: center;
+}
+.vms-text-right {
+	text-align: right;
+}
+.vms-text-sm {
+	font-size: 0.875rem;
+}
+.vms-text-xs {
+	font-size: 0.75rem;
+}
+.vms-text-lg {
+	font-size: 1.125rem;
+}
+.vms-text-xl {
+	font-size: 1.25rem;
+}
+.vms-text-2xl {
+	font-size: 1.5rem;
+}
+.vms-text-muted {
+	color: var(--vms-text-muted);
+}
+.vms-font-bold {
+	font-weight: 700;
+}
+
+.vms-text-gradient {
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.vms-mt-2 {
+	margin-top: 0.5rem;
+}
+.vms-mt-4 {
+	margin-top: 1rem;
+}
+.vms-mt-6 {
+	margin-top: 1.5rem;
+}
+.vms-mb-2 {
+	margin-bottom: 0.5rem;
+}
+.vms-mb-4 {
+	margin-bottom: 1rem;
+}
+.vms-mb-6 {
+	margin-bottom: 1.5rem;
+}
+.vms-p-4 {
+	padding: 1rem;
+}
+.vms-p-6 {
+	padding: 1.5rem;
+}
+
+.vms-hidden {
+	display: none !important;
+}
+.vms-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.vms-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.vms-empty-state {
+	text-align: center;
+	padding: 3rem 1rem;
+	color: var(--vms-text-muted);
+}
+
+.vms-empty-state svg {
+	width: 4rem;
+	height: 4rem;
+	margin: 0 auto 1rem;
+	opacity: 0.4;
+	filter: drop-shadow(0 4px 8px rgba(var(--vms-primary-rgb), 0.2));
+}
+
+/* Glow helpers */
+.vms-glow-sm {
+	box-shadow: var(--vms-glow-sm);
+}
+.vms-glow-md {
+	box-shadow: var(--vms-glow-md);
+}
+.vms-glow-lg {
+	box-shadow: var(--vms-glow-lg);
+}
+
+/* Entrance animations — staggerable via --vms-delay */
+.vms-float-in {
+	animation: vms-float-in 0.5s var(--vms-ease-spring) both;
+	animation-delay: var(--vms-delay, 0s);
+}
+
+@keyframes vms-float-in {
+	0% {
+		opacity: 0;
+		transform: translateY(16px) scale(0.98);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes vms-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   19. RESPONSIVE — mobile / tablet / desktop breakpoints
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Mobile: ≤ 640px */
+@media (max-width: 640px) {
+	body::before,
+	body::after {
+		filter: blur(80px);
+		opacity: 0.4;
+	}
+
+	.vms-card,
+	.vms-glass {
+		border-radius: 1rem;
+		padding: 1.25rem;
+	}
+
+	.vms-modal {
+		margin: 0.5rem;
+		max-height: 95vh;
+		border-radius: 1.25rem;
+		padding: 1.25rem;
+	}
+
+	.vms-theme-toggle button {
+		width: 2rem;
+		height: 2rem;
+	}
+	.vms-theme-toggle-indicator {
+		width: 2rem;
+		height: 2rem;
+	}
+	.vms-theme-toggle[data-mode="dark"] .vms-theme-toggle-indicator {
+		transform: translateX(2rem);
+	}
+	.vms-theme-toggle[data-mode="system"] .vms-theme-toggle-indicator {
+		transform: translateX(4rem);
+	}
+
+	.vms-toast-container {
+		left: 0.5rem;
+		right: 0.5rem;
+		max-width: none;
+		width: auto;
+	}
+
+	.vms-stat-card .stat-value {
+		font-size: 1.75rem;
+	}
+
+	.vms-login-card {
+		padding: 1.75rem;
+		border-radius: 1.25rem;
+	}
+}
+
+/* Mobile landscape + small tablets: ≤ 768px */
+@media (max-width: 768px) {
+	.vms-sidebar {
+		transform: translateX(-100%);
+		box-shadow: var(--vms-glass-shadow-hover);
+	}
+
+	.vms-sidebar.show {
+		transform: translateX(0);
+	}
+
+	.vms-main {
+		margin-left: 0;
+		padding: 1rem;
+	}
+
+	.vms-grid-2,
+	.vms-grid-3,
+	.vms-grid-4 {
+		grid-template-columns: 1fr;
+	}
+
+	.vms-navbar {
+		padding: 0.625rem 1rem;
+	}
+
+	.vms-btn-lg {
+		padding: 0.75rem 1.25rem;
+		font-size: 0.9375rem;
+	}
+}
+
+/* Tablet: 769px – 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+	.vms-grid-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.vms-grid-4 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.vms-main {
+		padding: 1.25rem;
+	}
+
+	body::before,
+	body::after {
+		filter: blur(100px);
+	}
+}
+
+/* Desktop: ≥ 1025px — enable hover-lift on interactive cards */
+@media (min-width: 1025px) and (hover: hover) {
+	.vms-card-lift:hover {
+		transform: translateY(-6px);
+		box-shadow: var(--vms-glass-shadow-hover), var(--vms-glow-sm);
+	}
+}
+
+/* Large desktop: ≥ 1536px */
+@media (min-width: 1536px) {
+	.vms-main {
+		max-width: 1920px;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: calc(260px + 2rem);
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   20. PRINT
+   ─────────────────────────────────────────────────────────────────────────── */
+@media print {
+	body::before,
+	body::after,
+	.vms-sidebar,
+	.vms-navbar,
+	.vms-toast-container,
+	.vms-theme-toggle,
+	.vms-btn,
+	.vms-modal-overlay {
+		display: none !important;
+	}
+
+	.vms-main {
+		margin-left: 0 !important;
+	}
+
+	.vms-card,
+	.vms-glass {
+		background: #ffffff !important;
+		border: 1px solid #cbd5e1 !important;
+		box-shadow: none !important;
+		backdrop-filter: none !important;
+	}
+
+	body {
+		background: #ffffff;
+		color: #000000;
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   21. TRANSITION UTILITIES (Alpine x-transition helpers)
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-fade-enter {
+	opacity: 0;
+	transform: translateY(-8px);
+}
+.vms-fade-enter-active {
+	transition:
+		opacity 0.2s var(--vms-ease-smooth),
+		transform 0.2s var(--vms-ease-smooth);
+}
+.vms-fade-leave-active {
+	transition:
+		opacity 0.15s var(--vms-ease-smooth),
+		transform 0.15s var(--vms-ease-smooth);
+}
+.vms-fade-leave-to {
+	opacity: 0;
+	transform: translateY(-8px);
+}
+
+/* Smooth color transitions when toggling dark mode — scoped to avoid fighting
+   component-level transitions (e.g. button hovers, modal pops). */
+html.transitioning,
+html.transitioning body,
+html.transitioning .vms-card,
+html.transitioning .vms-glass,
+html.transitioning .vms-navbar,
+html.transitioning .vms-sidebar {
+	transition:
+		background-color 0.4s var(--vms-ease-smooth),
+		border-color 0.4s var(--vms-ease-smooth),
+		color 0.4s var(--vms-ease-smooth);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   22. ENHANCED SELECT / DROPDOWN DESIGN (FIXED)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.vms-select {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.75rem center;
+	background-size: 16px;
+	padding-right: 2.5rem;
+	cursor: pointer;
+}
+
+.dark .vms-select {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.vms-select,
+.vms-select:focus,
+.vms-select:active {
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+
+	background: var(--vms-bg-input)
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+		no-repeat right 0.75rem center / 16px !important;
+
+	padding-right: 2.5rem;
+}
+
+/* CRITICAL FIX: Explicitly strip the background image off the option tags 
+   so the native browser engine stops tiling the arrow wrapper graphic.
+*/
+.vms-select option {
+	background-image: none !important;
+	background-color: var(
+		--vms-glass-bg-strong,
+		#1e293b
+	) !important; /* Fallback safe color */
+	color: var(--vms-text, #ffffff);
+	padding: 8px 12px;
+}
+
+/* Force remove native arrows in WebKit */
+.vms-select::-webkit-outer-spin-button,
+.vms-select::-webkit-inner-spin-button {
+	-webkit-appearance: none !important;
+}
+
+/* Extra safety: remove IE/Edge arrow */
+.vms-select::-ms-expand {
+	display: none !important;
+}
+/* ───────────────────────────────────────────────────────────────────────────
+   23. LOGO FIX — constrain logo dimensions
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-sidebar-logo,
+.vms-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem 1.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.vms-sidebar-logo img,
+.vms-logo img {
+	max-width: 160px;
+	max-height: 56px;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	display: block;
+}
+
+.vms-navbar .vms-logo img {
+	max-height: 40px;
+	max-width: 140px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   24. ENHANCED PAGINATION CONTROLS
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-pagination-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--vms-border);
+}
+
+.vms-pagination-info {
+	font-size: 0.8125rem;
+	color: var(--vms-text-muted);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   25. TAB NAVIGATION
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-tabs {
+	display: flex;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid var(--vms-glass-border);
+	border-radius: 0.875rem;
+	overflow-x: auto;
+}
+
+.vms-tab {
+	padding: 0.5rem 1rem;
+	border-radius: 0.625rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: var(--vms-text-muted);
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: all 0.2s var(--vms-ease-smooth);
+}
+
+.vms-tab:hover {
+	color: var(--vms-text);
+	background: rgba(var(--vms-primary-rgb), 0.06);
+}
+
+.vms-tab.active {
+	background: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+	color: #ffffff;
+	font-weight: 600;
+	box-shadow: 0 2px 8px rgba(var(--vms-primary-rgb), 0.3);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   26. SUCCESS / ERROR ANIMATIONS
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes vms-success-pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+	}
+	70% {
+		box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+	}
+}
+
+@keyframes vms-error-shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	10%,
+	50%,
+	90% {
+		transform: translateX(-4px);
+	}
+	30%,
+	70% {
+		transform: translateX(4px);
+	}
+}
+
+.vms-success-animate {
+	animation: vms-success-pulse 0.6s ease-out;
+}
+
+.vms-error-animate {
+	animation: vms-error-shake 0.5s ease-in-out;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   27. BADGE VARIANTS — Additional colours for audit/category
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-badge-purple {
+	background: rgba(139, 92, 246, 0.15);
+	color: #7c3aed;
+	border-color: rgba(139, 92, 246, 0.3);
+}
+.dark .vms-badge-purple {
+	background: rgba(139, 92, 246, 0.2);
+	color: #a78bfa;
+}
+
+.vms-badge-amber {
+	background: rgba(245, 158, 11, 0.15);
+	color: #b45309;
+	border-color: rgba(245, 158, 11, 0.3);
+}
+.dark .vms-badge-amber {
+	background: rgba(245, 158, 11, 0.2);
+	color: #fbbf24;
+}
+
+.vms-badge-orange {
+	background: rgba(249, 115, 22, 0.15);
+	color: #c2410c;
+	border-color: rgba(249, 115, 22, 0.3);
+}
+.dark .vms-badge-orange {
+	background: rgba(249, 115, 22, 0.2);
+	color: #fb923c;
+}
+
+.vms-badge-gray {
+	background: rgba(100, 116, 139, 0.15);
+	color: #475569;
+	border-color: rgba(100, 116, 139, 0.3);
+}
+.dark .vms-badge-gray {
+	background: rgba(100, 116, 139, 0.2);
+	color: #94a3b8;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   28. FILTER BAR — horizontal filter strip
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-filter-bar {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	padding: 0.75rem 0;
+}
+
+.vms-search-input {
+	position: relative;
+	flex: 1;
+	min-width: 200px;
+	max-width: 360px;
+}
+
+.vms-search-input input {
+	padding-left: 2.5rem;
+}
+
+.vms-search-input svg,
+.vms-search-input .search-icon {
+	position: absolute;
+	left: 0.875rem;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 1rem;
+	height: 1rem;
+	color: var(--vms-text-light);
+	pointer-events: none;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   29. EXPANDABLE ROW — for audit log details
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-expand-row {
+	background: rgba(var(--vms-primary-rgb), 0.03);
+}
+
+.vms-expand-row td {
+	padding: 0 1rem;
+}
+
+.vms-json-display {
+	background: var(--vms-glass-bg);
+	border: 1px solid var(--vms-border);
+	border-radius: 0.75rem;
+	padding: 0.75rem 1rem;
+	font-family: "JetBrains Mono", "Fira Code", monospace;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	word-break: break-all;
+	max-height: 200px;
+	overflow-y: auto;
+	color: var(--vms-text);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   30. EXPORT BUTTON GROUP
+   ─────────────────────────────────────────────────────────────────────────── */
+.vms-export-group {
+	display: inline-flex;
+	gap: 0.375rem;
+}
+
+.vms-btn-export {
+	background: var(--vms-glass-bg);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--vms-glass-border);
+	color: var(--vms-text-muted);
+	padding: 0.5rem 0.875rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	border-radius: 0.625rem;
+	cursor: pointer;
+	transition: all 0.2s var(--vms-ease-smooth);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.vms-btn-export:hover {
+	color: var(--vms-primary);
+	border-color: rgba(var(--vms-primary-rgb), 0.4);
+	background: rgba(var(--vms-primary-rgb), 0.06);
+}
+
+/* Alpine.js x-cloak — hide elements until Alpine hydrates. */
+[x-cloak] {
+	display: none !important;
+}
+
+.bg-gradient-brand {
+	background-image: linear-gradient(
+		135deg,
+		var(--vms-primary),
+		var(--vms-secondary)
+	);
+}
+
+.bg-gradient-brand-soft {
+	background-image: linear-gradient(
+		135deg,
+		rgba(var(--vms-primary-rgb), 0.15),
+		rgba(var(--vms-secondary-rgb), 0.15)
+	);
+}
+
+.bg-gradient-shine {
+	background-image: linear-gradient(
+		90deg,
+		transparent,
+		var(--vms-glass-shine),
+		transparent
+	);
+}
