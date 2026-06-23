@@ -31,7 +31,7 @@ get_header();
     <!-- ================================================================
 	     PAGE HEADER
 	     ================================================================ -->
-    <div class="vms-card" style="margin-bottom:1.5rem;">
+    <div class="vms-card">
         <div class="vms-flex vms-items-center vms-justify-between" style="flex-wrap:wrap;gap:1rem;">
             <div>
                 <h1 class="vms-text-xl vms-font-bold" style="margin:0;">
