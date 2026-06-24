@@ -34,7 +34,7 @@ $branding = vms_get_branding();
                     <?php esc_html_e( 'Dashboard', 'vms-theme' ); ?>
                 </h1>
                 <p class="vms-text-sm vms-text-muted" style="margin:0.25rem 0 0;">
-					<?php
+                    <?php
                     printf(
                         /* translators: %s: user display name */
                         esc_html__( 'Welcome back, %s', 'vms-theme' ),
@@ -52,8 +52,7 @@ $branding = vms_get_branding();
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <!-- Today's Visits -->
-        <div
-            class="vms-card">
+        <div class="vms-card">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -74,8 +73,7 @@ $branding = vms_get_branding();
         </div>
 
         <!-- Signed In Now -->
-        <div
-            class="vms-card">
+        <div class="vms-card">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -96,8 +94,7 @@ $branding = vms_get_branding();
         </div>
 
         <!-- Pending Approval -->
-        <div
-            class="vms-card">
+        <div class="vms-card">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -118,8 +115,7 @@ $branding = vms_get_branding();
         </div>
 
         <!-- Monthly Total -->
-        <div
-            class="vms-card">
+        <div class="vms-card">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -141,14 +137,13 @@ $branding = vms_get_branding();
     </div>
 
     <!-- Quick Actions -->
-    <div
-        class="vms-card">
+    <div class="vms-card">
         <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
             <?php esc_html_e( 'Quick Actions', 'vms-theme' ); ?>
         </h2>
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             <?php if ( current_user_can( 'vms_register_guests' ) ) : ?>
-            <a href="<?php echo esc_url( vms_get_page_url( 'register-guest' ) ); ?>"
+            <a href="<?php echo esc_url( vms_get_page_url( 'guests' ) ); ?>"
                 class="flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-[var(--vms-primary)]/10 dark:hover:bg-[var(--vms-primary)]/10 border border-transparent hover:border-[var(--vms-primary)]/20 transition-all duration-200 group">
                 <svg class="w-8 h-8 text-gray-400 group-hover:text-[var(--vms-primary)] transition-colors" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
@@ -204,8 +199,7 @@ $branding = vms_get_branding();
     </div>
 
     <!-- Recent Activity -->
-    <div
-        class="vms-card">
+    <div class="vms-card">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 <?php esc_html_e( 'Recent Activity', 'vms-theme' ); ?>

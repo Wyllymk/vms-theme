@@ -69,7 +69,8 @@ get_header();
                 <button @click="switchTab(tab.key)"
                     class="flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200" :class="activeTab === tab.key
 						? 'bg-[var(--vms-primary)] text-white shadow-lg shadow-[var(--vms-primary)]/25'
-						: 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'" x-text="tab.label"></button>
+						: 'text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700/50'"
+                    x-text="tab.label"></button>
             </template>
         </div>
     </div>
@@ -544,69 +545,69 @@ get_header();
     </div>
 
     <!-- ==================== ADD/EDIT CLUB MODAL ==================== -->
-    <div x-show="showClubModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4">
-        <div @click="showClubModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg max-h-[90vh] overflow-y-auto"
-            @click.stop>
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white"
+    <div x-show="showClubModal" x-cloak class="vms-modal-overlay">
+        <div @click="showClubModal = false" class="absolute inset-0"></div>
+        <div class="overflow-auto vms-modal vms-modal-lg" @click.stop>
+            <!-- Header -->
+            <div class="vms-flex vms-items-center vms-justify-between" style="margin-bottom:1.5rem;">
+                <h3 class="vms-text-lg vms-font-bold"
                     x-text="editingClub ? '<?php echo esc_js( __( 'Edit Club', 'vms-theme' ) ); ?>' : '<?php echo esc_js( __( 'Add Reciprocating Club', 'vms-theme' ) ); ?>'">
                 </h3>
-                <button @click="showClubModal = false"
-                    class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <button @click="showClubModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">
+                    &times;
                 </button>
             </div>
             <form @submit.prevent="saveClub" class="p-6 flex flex-col gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        <?php esc_html_e( 'Club Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
+                <div class="vms-form-group">
+                    <label class="vms-label">
+                        <?php esc_html_e( 'Club Name', 'vms-theme' ); ?>
+                        <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" x-model="clubForm.name" required
-                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <input class="vms-input" type="text" x-model="clubForm.name"
+                        placeholder="<?php esc_attr_e( 'Enter club name', 'vms-theme' ); ?>" required>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Email', 'vms-theme' ); ?>
                         </label>
-                        <input type="email" x-model="clubForm.email"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                        <input class="vms-input" type="email" x-model="clubForm.email"
+                            placeholder="<?php esc_attr_e( 'Enter email', 'vms-theme' ); ?>">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Phone', 'vms-theme' ); ?>
-                        </label>
-                        <input type="tel" x-model="clubForm.phone"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Phone', 'vms-theme' ); ?></label>
+                        <input class="vms-input" type="tel" x-model="clubForm.phone"
+                            placeholder="<?php esc_attr_e( 'Enter phone number', 'vms-theme' ); ?>">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Country', 'vms-theme' ); ?>
                         </label>
-                        <input type="text" x-model="clubForm.country"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                        <input class="vms-input" type="text" x-model="clubForm.country"
+                            placeholder="<?php esc_attr_e( 'Enter country', 'vms-theme' ); ?>">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Agreement Date', 'vms-theme' ); ?>
-                        </label>
-                        <input type="date" x-model="clubForm.agreement_date"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Agreement Date', 'vms-theme' ); ?> </label>
+                        <input class="vms-input" type="date" x-model="clubForm.agreement_date">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+
+                <div class="vms-form-group">
+                    <label class="vms-label">
                         <?php esc_html_e( 'Address / Location', 'vms-theme' ); ?>
+                        <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" x-model="clubForm.location"
-                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <select x-model="clubForm.status" class="vms-input">
+                        <option value="active"><?php esc_html_e( 'Active', 'vms-theme' ); ?></option>
+                        <option value="suspended"><?php esc_html_e( 'Suspended', 'vms-theme' ); ?></option>
+                        <option value="banned"><?php esc_html_e( 'Banned', 'vms-theme' ); ?></option>
+                    </select>
                 </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         <?php esc_html_e( 'Status', 'vms-theme' ); ?>
@@ -623,19 +624,12 @@ get_header();
                     class="p-3 rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400"
                     x-text="clubError"></div>
 
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" @click="showClubModal = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                <div class="vms-flex vms-justify-between" style="margin-top:1.5rem;">
+                    <button class="vms-btn vms-btn-secondary" type="button" @click="showClubModal = false">
                         <?php esc_html_e( 'Cancel', 'vms-theme' ); ?>
                     </button>
-                    <button type="submit" :disabled="saving"
-                        class="px-4 py-2 text-sm font-medium text-white bg-[var(--vms-primary)] hover:bg-[var(--vms-primary)]/90 rounded-xl shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2">
-                        <svg x-show="saving" x-cloak class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                        </svg>
+                    <button type="submit" class="vms-btn vms-btn-primary" :disabled="saving">
+                        <span x-show="saving" class="vms-spinner"></span>
                         <span
                             x-text="editingClub ? '<?php echo esc_js( __( 'Update Club', 'vms-theme' ) ); ?>' : '<?php echo esc_js( __( 'Add Club', 'vms-theme' ) ); ?>'"></span>
                     </button>

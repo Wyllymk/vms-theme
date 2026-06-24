@@ -72,30 +72,30 @@ $can_courtesy = in_array( $role, array( 'administrator', 'chairman', 'general_ma
                 :class="statusFilter === '' ? 'vms-btn-primary' : 'vms-btn-secondary py-[0.615rem]! px-3.5!'"
                 @click="statusFilter = ''; currentPage = 1; fetchGuests();">
                 <?php esc_html_e( 'All', 'vms-theme' ); ?>
-                <span class="vms-badge vms-badge-neutral" x-show="statusFilter === ''" x-text="totalRecords"
+                <span class="vms-badge vms-badge-neutral text-white!" x-show="statusFilter === ''" x-text="totalRecords"
                     style="margin-left:0.25rem;"></span>
             </button>
             <button class="vms-btn vms-btn-sm"
                 :class="statusFilter === 'active' ? 'vms-btn-success' : 'vms-btn-secondary py-[0.615rem]! px-3.5!'"
                 @click="statusFilter = 'active'; currentPage = 1; fetchGuests();">
                 <?php esc_html_e( 'Active', 'vms-theme' ); ?>
-                <span class="vms-badge vms-badge-neutral" x-show="statusFilter === 'active'" x-text="totalRecords"
-                    style="margin-left:0.25rem;"></span>
+                <span class="vms-badge vms-badge-neutral text-white!" x-show="statusFilter === 'active'"
+                    x-text="totalRecords" style="margin-left:0.25rem;"></span>
             </button>
             <button class="vms-btn vms-btn-sm"
                 :class="statusFilter === 'suspended' ? 'vms-btn-warning' : 'vms-btn-secondary py-[0.615rem]! px-3.5!'"
                 @click="statusFilter = 'suspended'; currentPage = 1; fetchGuests();"
                 style="--btn-warn-bg:rgba(245,158,11,0.15);">
                 <?php esc_html_e( 'Suspended', 'vms-theme' ); ?>
-                <span class="vms-badge vms-badge-neutral" x-show="statusFilter === 'suspended'" x-text="totalRecords"
-                    style="margin-left:0.25rem;"></span>
+                <span class="vms-badge vms-badge-neutral text-white!" x-show="statusFilter === 'suspended'"
+                    x-text="totalRecords" style="margin-left:0.25rem;"></span>
             </button>
             <button class="vms-btn vms-btn-sm"
                 :class="statusFilter === 'banned' ? 'vms-btn-danger' : 'vms-btn-secondary py-[0.615rem]! px-3.5!'"
                 @click="statusFilter = 'banned'; currentPage = 1; fetchGuests();">
                 <?php esc_html_e( 'Banned', 'vms-theme' ); ?>
-                <span class="vms-badge vms-badge-neutral" x-show="statusFilter === 'banned'" x-text="totalRecords"
-                    style="margin-left:0.25rem;"></span>
+                <span class="vms-badge vms-badge-neutral text-white!" x-show="statusFilter === 'banned'"
+                    x-text="totalRecords" style="margin-left:0.25rem;"></span>
             </button>
 
             <div style="flex:1;"></div>
@@ -277,7 +277,9 @@ $can_courtesy = in_array( $role, array( 'administrator', 'chairman', 'general_ma
             <!-- Header -->
             <div class="vms-flex vms-items-center vms-justify-between" style="margin-bottom:1.5rem;">
                 <h3 class="vms-text-lg vms-font-bold"><?php esc_html_e( 'Register New Guest', 'vms-theme' ); ?></h3>
-                <button @click="showRegisterModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">&times;</button>
+                <button @click="showRegisterModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">
+                    &times;
+                </button>
             </div>
 
             <!-- Search Existing -->

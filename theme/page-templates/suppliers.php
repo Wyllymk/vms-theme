@@ -122,95 +122,95 @@ get_header();
     </div>
 
     <!-- Add/Edit Modal -->
-    <div x-show="showAddModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+    <div x-show="showAddModal" x-cloak class="vms-modal-overlay">
         <div @click="showAddModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-lg"
-            @click.stop>
+        <div class="overflow-y-auto vms-modal vms-modal-lg" @click.stop>
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white"
                     x-text="editingSupplier ? '<?php echo esc_js( __( 'Edit Supplier', 'vms-theme' ) ); ?>' : '<?php echo esc_js( __( 'Add Supplier', 'vms-theme' ) ); ?>'">
                 </h3>
-                <button @click="showAddModal = false"
-                    class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <button @click="showAddModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">
+                    &times;
                 </button>
             </div>
             <form @submit.prevent="saveSupplier" class="p-6 flex flex-col gap-4">
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Company Name', 'vms-theme' ); ?>
-                        <span class="text-red-500">*</span></label>
-                    <input type="text" x-model="supplierForm.company_name" required
-                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                <div class="vms-form-group">
+                    <label class="vms-label">
+                        <?php esc_html_e( 'Company Name', 'vms-theme' ); ?>
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input class="vms-input" type="text" x-model="supplierForm.company_name" required>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Contact First Name', 'vms-theme' ); ?>
-                            <span class="text-red-500">*</span></label>
-                        <input type="text" x-model="supplierForm.contact_first_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'Contact First Name', 'vms-theme' ); ?>
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input class="vms-input" type="text" x-model="supplierForm.contact_first_name" required>
                     </div>
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Contact Last Name', 'vms-theme' ); ?>
-                            <span class="text-red-500">*</span></label>
-                        <input type="text" x-model="supplierForm.contact_last_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Phone', 'vms-theme' ); ?></label>
-                        <input type="tel" x-model="supplierForm.phone_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
-                    </div>
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Email', 'vms-theme' ); ?></label>
-                        <input type="email" x-model="supplierForm.email"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'Contact Last Name', 'vms-theme' ); ?>
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input class="vms-input" type="text" x-model="supplierForm.contact_last_name" required>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'ID Number', 'vms-theme' ); ?></label>
-                        <input type="text" x-model="supplierForm.id_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'Phone', 'vms-theme' ); ?>
+                        </label>
+                        <input class="vms-input" type="tel" x-model="supplierForm.phone_number">
                     </div>
-                    <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Vehicle Registration', 'vms-theme' ); ?></label>
-                        <input type="text" x-model="supplierForm.vehicle_reg"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'Email', 'vms-theme' ); ?>
+                        </label>
+                        <input class="vms-input" type="email" x-model="supplierForm.email">
                     </div>
                 </div>
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?php esc_html_e( 'Status', 'vms-theme' ); ?></label>
-                    <select x-model="supplierForm.status"
-                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'ID Number', 'vms-theme' ); ?>
+                        </label>
+                        <input class="vms-input" type="text" x-model="supplierForm.id_number">
+                    </div>
+                    <div class="vms-form-group">
+                        <label class="vms-label">
+                            <?php esc_html_e( 'Vehicle Registration', 'vms-theme' ); ?>
+                        </label>
+                        <input class="vms-input" type="text" x-model="supplierForm.vehicle_reg">
+                    </div>
+                </div>
+
+                <div class="vms-form-group">
+                    <label class="vms-label">
+                        <?php esc_html_e( 'Status', 'vms-theme' ); ?>
+                    </label>
+                    <select x-model="supplierForm.status" class="vms-input">
                         <option value="active"><?php esc_html_e( 'Active', 'vms-theme' ); ?></option>
                         <option value="suspended"><?php esc_html_e( 'Suspended', 'vms-theme' ); ?></option>
                         <option value="banned"><?php esc_html_e( 'Banned', 'vms-theme' ); ?></option>
                     </select>
                 </div>
+
                 <div x-show="supplierError" x-cloak
                     class="p-3 rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400"
                     x-text="supplierError"></div>
-                <div class="flex justify-end gap-3 pt-2">
+                <div class="vms-flex vms-justify-between pt-2">
                     <button type="button" @click="showAddModal = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                        <?php esc_html_e( 'Cancel', 'vms-theme' ); ?>
-                    </button>
-                    <button type="submit" :disabled="saving"
-                        class="px-4 py-2 text-sm font-medium text-white bg-[var(--vms-primary)] hover:bg-[var(--vms-primary)]/90 rounded-xl shadow-sm transition-colors disabled:opacity-50">
-                        <?php esc_html_e( 'Save', 'vms-theme' ); ?>
+                        class="vms-btn vms-btn-secondary"><?php esc_html_e( 'Cancel', 'vms-theme' ); ?></button>
+                    <button type="submit" :disabled="saving" class="vms-btn vms-btn-primary">
+                        <svg x-show="editSaving" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                        <?php esc_html_e( 'Save Supplier', 'vms-theme' ); ?>
                     </button>
                 </div>
             </form>

@@ -102,11 +102,9 @@ get_header();
         <!-- Status filter tabs -->
         <div class="flex flex-wrap gap-2 mt-3">
             <template x-for="tab in statusTabs" :key="tab.value">
-                <button @click="statusFilter = tab.value; currentPage = 1; loadMembers()"
-                    class="px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200" :class="statusFilter === tab.value
-						? 'bg-[var(--vms-primary)] text-white shadow-lg shadow-[var(--vms-primary)]/25'
-						: 'bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600/50'"
-                    x-text="tab.label"></button>
+                <button @click="statusFilter = tab.value; currentPage = 1; loadMembers()" class="vms-btn" :class="statusFilter === tab.value
+						? 'vms-btn-success'
+						: 'vms-btn-secondary'" x-text="tab.label"></button>
             </template>
         </div>
     </div>
@@ -338,13 +336,12 @@ get_header();
     <!-- ================================================================
 	     REJECT MODAL  (with optional reason)
 	     ================================================================ -->
-    <div x-show="showRejectModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4"
+    <div x-show="showRejectModal" x-cloak class="vms-modal-overlay"
         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-        <div @click="showRejectModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative w-full max-w-md bg-white border border-gray-200 shadow-2xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
-            @click.stop x-transition:enter="transition ease-out duration-200"
+        <div @click="showRejectModal = false" class="absolute inset-0"></div>
+        <div class="vms-modal vms-modal-lg" @click.stop x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100"

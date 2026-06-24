@@ -302,7 +302,7 @@ get_header();
         <!-- Table -->
         <div x-show="!loading && rows.length > 0" class="overflow-x-auto">
             <table class="w-full">
-                <thead>
+                <!-- <thead>
                     <tr class="border-b border-gray-200 dark:border-gray-700">
                         <th
                             class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-8">
@@ -336,11 +336,11 @@ get_header();
                             <?php esc_html_e( 'IP Address', 'vms-theme' ); ?>
                         </th>
                     </tr>
-                </thead>
+                </thead> -->
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
                     <template x-for="row in rows" :key="row.id">
                         <template x-if="true">
-                <tbody>
+                <tbody class="w-full">
                     <!-- Main Row -->
                     <tr @click="toggleRow(row.id)"
                         class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer group">

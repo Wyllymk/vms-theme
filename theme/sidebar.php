@@ -125,17 +125,16 @@ if ( class_exists( '\WyllyMk\VMS\VMS_Settings' ) ) {
 $stagger = 0; // Entrance-animation stagger counter — increments per visible item.
 ?>
 
-<aside
-	id="vms-sidebar"
-	class="fixed bottom-0 left-0 z-40 w-64 overflow-y-auto transition-transform duration-300 -translate-x-full border-r top-16 bg-white/55 dark:bg-slate-900/55 backdrop-blur-2xl backdrop-saturate-150 border-white/30 dark:border-slate-700/30 shadow-glass ease-spring lg:translate-x-0"
-	:class="sidebarOpen ? 'translate-x-0 shadow-glass-hover' : '-translate-x-full lg:translate-x-0'"
-	aria-label="<?php esc_attr_e( 'Dashboard navigation', 'vms-theme' ); ?>"
->
-	<!-- Gradient wash at the top — fades into the blur -->
-	<div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[rgba(var(--vms-primary-rgb),0.08)] to-transparent pointer-events-none" aria-hidden="true"></div>
+<aside id="vms-sidebar"
+    class="fixed bottom-0 left-0 z-40 w-64 overflow-y-auto transition-transform duration-300 -translate-x-full border-r top-16 bg-white/55 dark:bg-slate-900/55 backdrop-blur-2xl backdrop-saturate-150 border-white/30 dark:border-slate-700/30 shadow-glass ease-spring lg:translate-x-0"
+    :class="sidebarOpen ? 'translate-x-0 shadow-glass-hover' : '-translate-x-full lg:translate-x-0'"
+    aria-label="<?php esc_attr_e( 'Dashboard navigation', 'vms-theme' ); ?>">
+    <!-- Gradient wash at the top — fades into the blur -->
+    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[rgba(var(--vms-primary-rgb),0.08)] to-transparent pointer-events-none"
+        aria-hidden="true"></div>
 
-	<nav class="relative flex flex-col gap-1 p-3">
-		<?php foreach ( $nav_items as $item ) :
+    <nav class="relative flex flex-col gap-1 p-3">
+        <?php foreach ( $nav_items as $item ) :
 
 			// ─── Module gating ──────────────────────────────────────────
 			// Default to visible if the plugin/Settings class is absent so
@@ -160,58 +159,57 @@ $stagger = 0; // Entrance-animation stagger counter — increments per visible i
 			$delay     = $stagger * 0.04;
 			$stagger++;
 			?>
-			<a
-				href="<?php echo esc_url( $item_url ); ?>"
-				class="vms-nav-item group animate-float-in <?php echo $is_active ? 'active' : ''; ?>"
-				style="--vms-delay: <?php echo esc_attr( $delay ); ?>s"
-				<?php if ( $is_active ) : ?>aria-current="page"<?php endif; ?>
-				@click="if (window.innerWidth < 1024) sidebarOpen = false"
-			>
-				<svg class="w-5 h-5 transition-transform duration-200 shrink-0 group-hover:scale-110"
-				     fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<?php echo $item['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG paths are hardcoded above. ?>
-				</svg>
-				<span class="truncate"><?php echo esc_html( $item['label'] ); ?></span>
+        <a href="<?php echo esc_url( $item_url ); ?>"
+            class="vms-nav-item group animate-float-in <?php echo $is_active ? 'active' : ''; ?>"
+            style="--vms-delay: <?php echo esc_attr( $delay ); ?>s" <?php if ( $is_active ) : ?>aria-current="page"
+            <?php endif; ?> @click="if (window.innerWidth < 1024) sidebarOpen = false">
+            <svg class="w-5 h-5 transition-transform duration-200 shrink-0 group-hover:scale-110" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <?php echo $item['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG paths are hardcoded above. ?>
+            </svg>
+            <span class="truncate"><?php echo esc_html( $item['label'] ); ?></span>
 
-				<?php if ( $is_active ) : ?>
-					<!-- Active indicator — pulsing dot -->
-					<span class="flex items-center ml-auto" aria-hidden="true">
-						<span class="relative flex w-2 h-2">
-							<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--vms-primary)] opacity-60"></span>
-							<span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--vms-primary)]"></span>
-						</span>
-					</span>
-				<?php else : ?>
-					<svg class="w-4 h-4 ml-auto transition-all duration-200 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
-					     fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-					</svg>
-				<?php endif; ?>
-			</a>
-		<?php endforeach; ?>
-	</nav>
+            <?php if ( $is_active ) : ?>
+            <!-- Active indicator — pulsing dot -->
+            <span class="flex items-center ml-auto" aria-hidden="true">
+                <span class="relative flex w-2 h-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--vms-primary)] opacity-60"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--vms-primary)]"></span>
+                </span>
+            </span>
+            <?php else : ?>
+            <svg class="w-4 h-4 ml-auto transition-all duration-200 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <?php endif; ?>
+        </a>
+        <?php endforeach; ?>
+    </nav>
 
-	<!-- Sidebar Footer — version badge in a tiny glass pill -->
-	<div class="absolute bottom-0 left-0 right-0 p-4">
-		<div class="text-center">
-			<span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[0.65rem] font-semibold
+    <!-- Sidebar Footer — version badge in a tiny glass pill -->
+    <div class="absolute bottom-0 left-0 right-0 p-4">
+        <div class="text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[0.65rem] font-semibold
 			             bg-white/40 dark:bg-slate-800/40
 			             backdrop-blur-sm
 			             border border-white/40 dark:border-slate-700/40
 			             rounded-full
 			             text-slate-500 dark:text-slate-400">
-				<span class="relative flex h-1.5 w-1.5">
-					<span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-emerald-400"></span>
-					<span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-				</span>
-				<?php
+                <span class="relative flex h-1.5 w-1.5">
+                    <span
+                        class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-emerald-400"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                </span>
+                <?php
 				printf(
 					/* translators: %s: VMS Theme version */
 					esc_html__( 'VMS v%s', 'vms-theme' ),
-					esc_html( VMS_THEME_VERSION )
+					esc_html( '2.0.0' )
 				);
 				?>
-			</span>
-		</div>
-	</div>
+            </span>
+        </div>
+    </div>
 </aside>

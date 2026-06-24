@@ -66,12 +66,9 @@ get_header();
         <!-- Status Tabs -->
         <div class="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700 pb-3 overflow-x-auto">
             <template x-for="tab in statusTabs" :key="tab.value">
-                <button @click="statusFilter = tab.value; currentPage = 1; fetchStaff()"
-                    class="px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors"
-                    :class="statusFilter === tab.value
-						? 'bg-[var(--vms-primary)] text-white shadow-sm'
-						: 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/50'"
-                    x-text="tab.label + (tab.value === '' ? ' (' + totalRecords + ')' : '')"></button>
+                <button @click="statusFilter = tab.value; currentPage = 1; fetchStaff()" class="vms-btn" :class="statusFilter === tab.value
+						? 'vms-btn-success'
+						: 'vms-btn-secondary'" x-text="tab.label + (tab.value === '' ? ' (' + totalRecords + ')' : '')"></button>
             </template>
         </div>
 
@@ -307,13 +304,12 @@ get_header();
     </div>
 
     <!-- ═══════════════════════ REGISTER STAFF MODAL ═══════════════════════ -->
-    <div x-show="showRegisterModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4"
+    <div x-show="showRegisterModal" x-cloak class="vms-modal-overlay"
         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-        <div @click="showRegisterModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[90vh] flex flex-col"
-            @click.stop x-transition:enter="transition ease-out duration-200"
+        <div @click="showRegisterModal = false" class="absolute inset-0"></div>
+        <div class="vms-modal vms-modal-lg" @click.stop x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95">
@@ -323,82 +319,54 @@ get_header();
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     <?php esc_html_e( 'Register New Staff', 'vms-theme' ); ?>
                 </h3>
-                <button @click="showRegisterModal = false"
-                    class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+
+                <button @click="showRegisterModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">&times;</button>
             </div>
 
             <!-- Body -->
             <form @submit.prevent="registerStaff()" class="p-6 flex flex-col gap-4 overflow-y-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'First Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" x-model="registerForm.first_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'First Name', 'vms-theme' ); ?> *</label>
+                        <input type="text" class="vms-input" x-model="registerForm.first_name" required>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Last Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" x-model="registerForm.last_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Last Name', 'vms-theme' ); ?> *</label>
+                        <input type="text" class="vms-input" x-model="registerForm.last_name" required>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Email', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email" x-model="registerForm.email" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Phone Number', 'vms-theme' ); ?></label>
+                        <input type="tel" class="vms-input" x-model="registerForm.phone_number">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Phone Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="tel" x-model="registerForm.phone_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Email', 'vms-theme' ); ?></label>
+                        <input type="email" class="vms-input" x-model="registerForm.email">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Employee Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="text" x-model="registerForm.employee_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Employee Number', 'vms-theme' ); ?></label>
+                        <input type="text" class="vms-input" x-model="registerForm.employee_number">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'ID Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="text" x-model="registerForm.id_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'ID Number', 'vms-theme' ); ?></label>
+                        <input type="text" class="vms-input" x-model="registerForm.id_number">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Department', 'vms-theme' ); ?>
-                        </label>
-                        <input type="text" x-model="registerForm.department"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Department', 'vms-theme' ); ?></label>
+                        <input type="text" x-model="registerForm.department" class="vms-input">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Position', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <select x-model="registerForm.position" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Position', 'vms-theme' ); ?> <span
+                                class="text-red-500">*</span></label>
+                        <select x-model="registerForm.position" required class="vms-input">
                             <option value=""><?php esc_html_e( 'Select position...', 'vms-theme' ); ?></option>
                             <option value="gate"><?php esc_html_e( 'Gate', 'vms-theme' ); ?></option>
                             <option value="reception"><?php esc_html_e( 'Receptionist', 'vms-theme' ); ?></option>
@@ -409,11 +377,10 @@ get_header();
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label class="vms-label">
                         <?php esc_html_e( 'Hire Date', 'vms-theme' ); ?>
                     </label>
-                    <input type="date" x-model="registerForm.hire_date"
-                        class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <input type="date" x-model="registerForm.hire_date" class="vms-input">
                 </div>
 
                 <!-- Error -->
@@ -422,14 +389,11 @@ get_header();
                     x-text="registerError"></div>
 
                 <!-- Footer -->
-                <div class="flex justify-end gap-3 pt-2">
+                <div class="vms-flex vms-justify-between pt-2">
                     <button type="button" @click="showRegisterModal = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                        <?php esc_html_e( 'Cancel', 'vms-theme' ); ?>
-                    </button>
-                    <button type="submit" :disabled="saving"
-                        class="px-4 py-2 text-sm font-medium text-white bg-[var(--vms-primary)] hover:bg-[var(--vms-primary)]/90 rounded-xl shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2">
-                        <svg x-show="saving" x-cloak class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        class="vms-btn vms-btn-secondary"><?php esc_html_e( 'Cancel', 'vms-theme' ); ?></button>
+                    <button type="submit" :disabled="saving" class="vms-btn vms-btn-primary">
+                        <svg x-show="editSaving" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>
                             <path class="opacity-75" fill="currentColor"
@@ -443,98 +407,72 @@ get_header();
     </div>
 
     <!-- ═══════════════════════ EDIT STAFF MODAL ═══════════════════════ -->
-    <div x-show="showEditModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4"
-        x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-        <div @click="showEditModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl max-h-[90vh] flex flex-col"
-            @click.stop x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95">
+    <div x-show="showEditModal" x-cloak class="vms-modal-overlay" x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+        <div @click="showEditModal = false" class="absolute inset-0"></div>
+        <div class="overflow-y-auto vms-modal vms-modal-lg" @click.stop
+            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
             <!-- Header -->
-            <div
-                class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
+            <div class="vms-flex vms-items-center vms-justify-between">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     <?php esc_html_e( 'Edit Staff Member', 'vms-theme' ); ?>
                 </h3>
-                <button @click="showEditModal = false"
-                    class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <button @click="showEditModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">
+                    &times;
                 </button>
             </div>
 
             <!-- Body -->
             <form @submit.prevent="updateStaff()" class="p-6 flex flex-col gap-4 overflow-y-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'First Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" x-model="editForm.first_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'First Name', 'vms-theme' ); ?> *</label>
+                        <input type="text" class="vms-input" x-model="editForm.first_name" required>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Last Name', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" x-model="editForm.last_name" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Last Name', 'vms-theme' ); ?> *</label>
+                        <input type="text" class="vms-input" x-model="editForm.last_name" required>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Email', 'vms-theme' ); ?> <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email" x-model="editForm.email" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Phone Number', 'vms-theme' ); ?></label>
+                        <input type="tel" class="vms-input" x-model="editForm.phone_number">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Phone Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="tel" x-model="editForm.phone_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Email', 'vms-theme' ); ?> *</label>
+                        <input type="email" class="vms-input" x-model="editForm.email" required>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'Employee Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="text" x-model="editForm.employee_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'Employee Number', 'vms-theme' ); ?></label>
+                        <input type="text" class="vms-input" x-model="editForm.employee_number">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            <?php esc_html_e( 'ID Number', 'vms-theme' ); ?>
-                        </label>
-                        <input type="text" x-model="editForm.id_number"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                    <div class="vms-form-group">
+                        <label class="vms-label"><?php esc_html_e( 'ID Number', 'vms-theme' ); ?> *</label>
+                        <input type="text" class="vms-input" x-model="editForm.id_number" required>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div class="vms-grid vms-grid-2">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Department', 'vms-theme' ); ?>
                         </label>
-                        <input type="text" x-model="editForm.department"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                        <input type="text" x-model="editForm.department" class="vms-input">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Position', 'vms-theme' ); ?> <span class="text-red-500">*</span>
                         </label>
-                        <select x-model="editForm.position" required
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                        <select x-model="editForm.position" required class="vms-input">
                             <option value=""><?php esc_html_e( 'Select position...', 'vms-theme' ); ?></option>
                             <option value="gate"><?php esc_html_e( 'Gate', 'vms-theme' ); ?></option>
                             <option value="reception"><?php esc_html_e( 'Receptionist', 'vms-theme' ); ?></option>
@@ -544,20 +482,18 @@ get_header();
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div class="vms-grid vms-grid-2 gap-4">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Hire Date', 'vms-theme' ); ?>
                         </label>
-                        <input type="date" x-model="editForm.hire_date"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                        <input type="date" x-model="editForm.hire_date" class="vms-input">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <div class="vms-form-group">
+                        <label class="vms-label">
                             <?php esc_html_e( 'Status', 'vms-theme' ); ?>
                         </label>
-                        <select x-model="editForm.employee_status"
-                            class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--vms-primary)] focus:border-transparent transition-colors">
+                        <select x-model="editForm.employee_status" class="vms-input">
                             <option value="active"><?php esc_html_e( 'Active', 'vms-theme' ); ?></option>
                             <option value="suspended"><?php esc_html_e( 'Suspended', 'vms-theme' ); ?></option>
                             <option value="terminated"><?php esc_html_e( 'Terminated', 'vms-theme' ); ?></option>
@@ -571,14 +507,11 @@ get_header();
                     x-text="editError"></div>
 
                 <!-- Footer -->
-                <div class="flex justify-end gap-3 pt-2">
+                <div class="vms-flex vms-justify-between pt-2">
                     <button type="button" @click="showEditModal = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                        <?php esc_html_e( 'Cancel', 'vms-theme' ); ?>
-                    </button>
-                    <button type="submit" :disabled="saving"
-                        class="px-4 py-2 text-sm font-medium text-white bg-[var(--vms-primary)] hover:bg-[var(--vms-primary)]/90 rounded-xl shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2">
-                        <svg x-show="saving" x-cloak class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        class="vms-btn vms-btn-secondary"><?php esc_html_e( 'Cancel', 'vms-theme' ); ?></button>
+                    <button type="submit" :disabled="saving" class="vms-btn vms-btn-primary">
+                        <svg x-show="editSaving" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>
                             <path class="opacity-75" fill="currentColor"
@@ -592,19 +525,17 @@ get_header();
     </div>
 
     <!-- ═══════════════════════ VIEW STAFF DETAILS MODAL ═══════════════════════ -->
-    <div x-show="showViewModal" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center p-4"
-        x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+    <div x-show="showViewModal" x-cloak class="vms-modal-overlay" x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
         <div @click="showViewModal = false" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-3xl max-h-[90vh] flex flex-col"
-            @click.stop x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95">
+        <div class="overflow-y-auto vms-modal vms-modal-lg" @click.stop
+            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
             <!-- Header -->
-            <div
-                class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
+            <div class="vms-flex vms-items-center vms-justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-[var(--vms-primary)]/10 flex items-center justify-center text-sm font-semibold text-[var(--vms-primary)]"
                         x-text="viewingStaff ? (viewingStaff.first_name?.[0] || '') + (viewingStaff.last_name?.[0] || '') : ''">
@@ -625,13 +556,10 @@ get_header();
                                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </button>
-                    <button @click="showViewModal = false"
-                        class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                    <button @click="showViewModal = false" class="vms-btn vms-btn-sm vms-btn-secondary">
+                        &times;
                     </button>
+
                 </div>
             </div>
 
@@ -822,14 +750,18 @@ get_header();
             </div>
 
             <!-- Footer -->
-            <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700 shrink-0">
-                <button @click="viewingStaff && openEditModal(viewingStaff); showViewModal = false"
-                    class="px-4 py-2 text-sm font-medium text-[var(--vms-primary)] bg-[var(--vms-primary)]/10 rounded-xl hover:bg-[var(--vms-primary)]/20 transition-colors">
-                    <?php esc_html_e( 'Edit Staff', 'vms-theme' ); ?>
-                </button>
+            <div class="vms-flex vms-justify-between pt-2">
                 <button @click="showViewModal = false"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                    <?php esc_html_e( 'Close', 'vms-theme' ); ?>
+                    class="vms-btn vms-btn-secondary"><?php esc_html_e( 'Close', 'vms-theme' ); ?></button>
+                <button @click="viewingStaff && openEditModal(viewingStaff); showViewModal = false"
+                    class="vms-btn vms-btn-primary">
+                    <svg x-show="editSaving" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+                        </path>
+                    </svg>
+                    <?php esc_html_e( 'Edit Staff', 'vms-theme' ); ?>
                 </button>
             </div>
         </div>
