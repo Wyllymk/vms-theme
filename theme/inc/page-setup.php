@@ -56,7 +56,7 @@ function vms_theme_page_definitions(): array {
 			'template' => 'page-templates/accommodation.php',
 		),
 		array(
-			'title'    => __( 'Reciprocating Clubs', 'vms-theme' ),
+			'title'    => __( 'Reciprocation', 'vms-theme' ),
 			'slug'     => 'reciprocation',
 			'template' => 'page-templates/reciprocation.php',
 		),
